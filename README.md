@@ -10,3 +10,7 @@
 * [#03 Encapsulating state within a function](#encapsulating-state-within-a-function)
 * [#02 Generating all cases for an Enum](#generating-all-cases-for-an-enum)
 * [#01 Using map on optional values](#using-map-on-optional-values)
+
+
+
+
