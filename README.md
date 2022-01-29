@@ -5,11 +5,44 @@
 # 目录
 
 
+* [#10 Observing new and old value with RxSwift](#observing-new-and-old-value-with-rxswift)
+* [#09 Implicit initialization from literal values](#implicit-initialization-from-literal-values)
+* [#08 Achieving systematic validation of data](#achieving-systematic-validation-of-data)
+* [#07 Implementing the builder pattern with keypaths](#implementing-the-builder-pattern-with-keypaths)
+* [#06 存储函数而不是存储值](#存储函数而不是存储值)
 * [#05 定义函数类型上运算符](#定义函数类型上运算符)
 * [#04 函数别名](#函数别名)
 * [#03 在函数中封装状态](#在函数中封装状态)
 * [#02 生成枚举中所有cases](#生成枚举中所有cases)
 * [#01 对可选值使用map](#对可选值使用map)
+
+## 存储函数而不是存储值
+当一个 `类` 存储值的唯一目的是参数化其函数时（不太懂笔者的参数化其函数是什么意思？），就可以不存储值，而是直接存储函数，这两者在调用位置没有明显的差异。（意思是存储闭包函数，而非存储属性来参数化其函数）
+
+```swift
+import Foundation
+
+struct MaxValidator {
+    let max: Int
+    let strictComparison: Bool
+    
+    func isValid(_ value: Int) -> Bool {
+        return self.strictComparison ? value < self.max : value <= self.max
+    }
+}
+
+struct MaxValidator2 {
+    var isValid: (_ value: Int) -> Bool
+    
+    init(max: Int, strictComparison: Bool) {
+        self.isValid = strictComparison ? { $0 < max } : { $0 <= max }
+    }
+}
+
+MaxValidator(max: 5, strictComparison: true).isValid(5) // false
+MaxValidator2(max: 5, strictComparison: false).isValid(5) // true
+```
+
 
 ## 定义函数类型上运算符
 函数是Swift中的一级公民类型，因此为它们定义运算符是完全合法的。
